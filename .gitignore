@@ -62,7 +62,7 @@ dkms.conf
 /__garbage__/
 **/.vscode/
 **/.devcontainer
-/.idea/
+.idea/
 cmake-build-debug/
 
 /esp-idf-lib.code-workspace
@@ -75,3 +75,6 @@ Gemfile.lock
 # bundled files by ruby bundler and configuration
 /.bundle/
 /vendor/
+
+# python cache
+__pycache__/

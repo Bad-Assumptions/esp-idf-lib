@@ -34,15 +34,7 @@ or
    cd ~/my/work/path
    git clone git@gitlab.com:UncleRus/esp-idf-lib.git
 
-Add path to components in your project makefile, e.g:
-
-.. code-block:: make
-   
-   PROJECT_NAME := my-esp-project
-   EXTRA_COMPONENT_DIRS := $(HOME)/my/work/path/esp-idf-lib/components
-   include $(IDF_PATH)/make/project.mk
-   
-or in CMakeLists.txt:
+Add path to components in your project CMakeLists.txt:
 
 .. code-block:: cmake
 
@@ -92,6 +84,7 @@ Common libraries
    groups/color
    groups/noise
    groups/framebuffer
+   groups/calibration
 
 Real-time clocks
 ================
@@ -126,6 +119,7 @@ Humidity & temperature sensors
    groups/hdc1000
    groups/max31855
    groups/sts21
+   groups/sts3x
    groups/am2320
 
 Pressure sensors
@@ -149,6 +143,7 @@ Air quality/Gas sensors
    groups/mhz19b
    groups/scd4x
    groups/scd30
+   groups/sfa3x
 
 ADC/DAC
 =======
@@ -179,7 +174,8 @@ Magnetic sensors
 
    groups/hmc5883l
    groups/qmc5883l
-   
+   groups/lsm303
+
 Light sensors
 =============
 .. toctree::
@@ -202,7 +198,8 @@ GPIO expanders
    groups/mcp23008
    groups/mcp23x17
    groups/pca9557
-   
+   groups/tca6424a
+
 LED drivers
 ===========
 .. toctree::
@@ -228,6 +225,17 @@ Inertial measurement units
    :maxdepth: 1
 
    groups/icm42670
+   groups/mpu6050
+   groups/l3gx
+   groups/lsm303
+
+Battery controllers
+===================
+.. toctree::
+   :maxdepth: 1
+
+   groups/lc709203f
+   groups/max1704x
 
 Other
 =====
@@ -242,8 +250,7 @@ Other
    groups/tca9548
    groups/ds3502
    groups/wiegand
-   groups/lc709203f
-   
+
 
 ===========
 Information
