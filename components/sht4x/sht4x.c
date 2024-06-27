@@ -44,6 +44,11 @@
 
 #define I2C_FREQ_HZ 1000000 // 1MHz
 
+// due to the fact that ticks can be smaller than portTICK_PERIOD_MS, one and
+// a half tick period added to the duration to be sure that waiting time for
+// the results is long enough
+#define TIME_TO_TICKS(ms) (1 + ((ms) + (portTICK_PERIOD_MS-1) + portTICK_PERIOD_MS/2 ) / portTICK_PERIOD_MS)
+
 static const char *TAG = "sht4x";
 
 #define CMD_RESET             0x94
@@ -174,8 +179,7 @@ static esp_err_t exec_cmd(sht4x_t *dev, uint8_t cmd, size_t delay_ticks, sht4x_r
 {
     I2C_DEV_TAKE_MUTEX(&dev->i2c_dev);
     I2C_DEV_CHECK(&dev->i2c_dev, send_cmd_nolock(dev, cmd));
-    if (delay_ticks)
-        vTaskDelay(delay_ticks);
+    vTaskDelay(delay_ticks + 1);
     I2C_DEV_CHECK(&dev->i2c_dev, read_res_nolock(dev, res));
     I2C_DEV_GIVE_MUTEX(&dev->i2c_dev);
 
@@ -225,7 +229,7 @@ esp_err_t sht4x_init(sht4x_t *dev)
     dev->heater = SHT4X_HEATER_OFF;
 
     sht4x_raw_data_t s;
-    CHECK(exec_cmd(dev, CMD_SERIAL, pdMS_TO_TICKS(10), s));
+    CHECK(exec_cmd(dev, CMD_SERIAL, TIME_TO_TICKS(10), s));
     dev->serial = ((uint32_t)s[0] << 24) | ((uint32_t)s[1] << 16) | ((uint32_t)s[3] << 8) | s[4];
 
     return sht4x_reset(dev);
@@ -273,7 +277,7 @@ size_t sht4x_get_measurement_duration(sht4x_t *dev)
 {
     if (!dev) return 0;
 
-    size_t res = pdMS_TO_TICKS(get_duration_ms(dev));
+    size_t res = TIME_TO_TICKS(get_duration_ms(dev));
     return res == 0 ? 1 : res;
 }
 
